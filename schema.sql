@@ -63,3 +63,15 @@ INSERT INTO polos (polo_nome) VALUES
     ('POLO 1'), ('POLO 2'), ('POLO 3'), ('POLO 4'),
     ('POLO 5'), ('POLO 6'), ('POLO 7'), ('POLO 8')
 ON CONFLICT (polo_nome) DO NOTHING;
+
+-- ========== Usuários do sistema (login) ==========
+CREATE TABLE IF NOT EXISTS sys_usuarios (
+    cod_usuario       SERIAL PRIMARY KEY,
+    email             VARCHAR(200) NOT NULL UNIQUE,
+    senha_hash        VARCHAR(255) NOT NULL,
+    nome              VARCHAR(200) NOT NULL,
+    ies_ativo         CHAR(1) NOT NULL DEFAULT 'S',
+    dat_cadastro      TIMESTAMP NOT NULL DEFAULT NOW(),
+    dat_ultimo_login  TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_sys_usuarios_email ON sys_usuarios(email);

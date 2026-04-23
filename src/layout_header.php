@@ -298,10 +298,23 @@ $flash       = flash_get();
       <a class="nav-pill<?= $currentPage==='relatorio'?' active':'' ?>" href="<?= url('relatorio') ?>"><i class="bi bi-graph-up"></i> Relatório</a>
       <a class="nav-pill<?= $currentPage==='importar'?' active':'' ?>" href="<?= url('importar') ?>"><i class="bi bi-cloud-upload"></i> Importar</a>
     </nav>
-    <div class="ms-auto">
+    <div class="ms-auto d-flex align-items-center gap-2">
       <a href="<?= url('auditoria_form') ?>" class="btn btn-brand btn-sm">
         <i class="bi bi-plus-lg"></i> Nova auditoria
       </a>
+      <?php $me = auth_user(); if ($me): ?>
+        <div class="dropdown">
+          <button class="btn btn-ghost btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i> <?= e(explode(' ', $me['nome'])[0]) ?>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow" style="border:1px solid var(--line); border-radius:10px;">
+            <li><span class="dropdown-item-text small text-muted-2"><?= e($me['email']) ?></span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="<?= url('usuarios') ?>"><i class="bi bi-people"></i> Usuários</a></li>
+            <li><a class="dropdown-item text-danger" href="?a=login_sair"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+          </ul>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
   <!-- Mobile nav -->
