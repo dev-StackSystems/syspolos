@@ -1,0 +1,6 @@
+.env
+.vercel
+vendor/
+node_modules/
+*.log
+/_uploads/
