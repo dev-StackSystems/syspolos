@@ -23,12 +23,15 @@ $escolas = db_all("
 
 $polos = db_all("SELECT cod_polo, polo_nome FROM polos WHERE ies_ativo='S' ORDER BY polo_nome");
 ?>
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h4 class="mb-0"><i class="bi bi-building"></i> Escolas</h4>
+<div class="page-title">
+  <div>
+    <h4><i class="bi bi-building"></i> Escolas</h4>
+    <div class="muted-sub"><?= count($escolas) ?> escola(s)</div>
+  </div>
   <button class="btn btn-brand btn-sm" onclick="abrirEscola(0)"><i class="bi bi-plus-lg"></i> Nova escola</button>
 </div>
 
-<div class="card shadow-sm mb-3">
+<div class="card mb-3">
   <div class="card-body">
     <form method="GET" class="row g-2 align-items-end">
       <input type="hidden" name="p" value="escolas">
@@ -41,55 +44,57 @@ $polos = db_all("SELECT cod_polo, polo_nome FROM polos WHERE ies_ativo='S' ORDER
           <?php endforeach; ?>
         </select>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-6">
         <label class="form-label">Buscar</label>
         <input type="text" name="q" class="form-control form-control-sm" value="<?= e($fil_q) ?>" placeholder="Nome, localidade, diretor...">
       </div>
-      <div class="col-md-2">
-        <button class="btn btn-sm btn-brand w-100"><i class="bi bi-search"></i> Filtrar</button>
-      </div>
-      <div class="col-md-2">
-        <a href="<?= url('escolas') ?>" class="btn btn-sm btn-outline-secondary w-100">Limpar</a>
+      <div class="col-md-3 d-flex gap-2">
+        <button class="btn btn-sm btn-brand flex-fill"><i class="bi bi-search"></i> Filtrar</button>
+        <a href="<?= url('escolas') ?>" class="btn btn-sm btn-ghost"><i class="bi bi-x"></i></a>
       </div>
     </form>
   </div>
 </div>
 
-<div class="card shadow-sm">
-  <div class="card-body p-0">
-    <table class="table tbl-compact mb-0">
-      <thead>
-        <tr>
-          <th style="width:100px;">Polo</th>
-          <th>Escola</th>
-          <th>Localidade</th>
-          <th>Diretor</th>
-          <th>Coordenador</th>
-          <th class="text-center" style="width:90px;">Audit.</th>
-          <th style="width:120px;"></th>
-        </tr>
-      </thead>
-      <tbody>
-      <?php foreach ($escolas as $es): ?>
-        <tr>
-          <td><span class="badge badge-polo"><?= e($es['polo_nome']) ?></span></td>
-          <td><strong><?= e($es['escola_nome']) ?></strong></td>
-          <td><?= e($es['localidade']) ?></td>
-          <td><?= e($es['diretor']) ?></td>
-          <td><?= e($es['coordenador']) ?></td>
-          <td class="text-center"><a href="<?= url('auditorias', ['cod_escola' => $es['cod_escola']]) ?>"><?= (int)$es['qtd_auditorias'] ?></a></td>
-          <td>
-            <button class="btn btn-sm btn-outline-primary" onclick="abrirEscola(<?= (int)$es['cod_escola'] ?>)"><i class="bi bi-pencil"></i></button>
-            <button class="btn btn-sm btn-outline-danger" onclick="excluirEscola(<?= (int)$es['cod_escola'] ?>, '<?= e($es['escola_nome']) ?>')"><i class="bi bi-trash"></i></button>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-      <?php if (!$escolas): ?>
-        <tr><td colspan="7" class="text-center text-muted p-4">Nenhuma escola encontrada.</td></tr>
-      <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
+<div class="card">
+  <?php if ($escolas): ?>
+  <table class="table tbl-compact">
+    <thead>
+      <tr>
+        <th style="width:100px;">Polo</th>
+        <th>Escola</th>
+        <th>Localidade</th>
+        <th>Diretor</th>
+        <th>Coordenador</th>
+        <th class="text-center" style="width:90px;">Audit.</th>
+        <th style="width:120px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($escolas as $es): ?>
+      <tr>
+        <td><span class="badge badge-polo"><?= e($es['polo_nome']) ?></span></td>
+        <td><strong style="color:var(--ink)"><?= e($es['escola_nome']) ?></strong></td>
+        <td class="text-muted-2"><?= e($es['localidade']) ?: '—' ?></td>
+        <td class="text-muted-2"><?= e($es['diretor']) ?: '—' ?></td>
+        <td class="text-muted-2"><?= e($es['coordenador']) ?: '—' ?></td>
+        <td class="text-center"><a href="<?= url('auditorias', ['cod_escola' => $es['cod_escola']]) ?>"><?= (int)$es['qtd_auditorias'] ?></a></td>
+        <td>
+          <button class="btn btn-sm btn-ghost" onclick="abrirEscola(<?= (int)$es['cod_escola'] ?>)" title="Editar"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-outline-danger" onclick="excluirEscola(<?= (int)$es['cod_escola'] ?>, '<?= e($es['escola_nome']) ?>')" title="Excluir"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+  <?php else: ?>
+    <div class="empty">
+      <div class="empty-ico"><i class="bi bi-building"></i></div>
+      <h5>Nenhuma escola encontrada</h5>
+      <p>Cadastre a primeira escola para começar.</p>
+      <button class="btn btn-brand btn-sm" onclick="abrirEscola(0)"><i class="bi bi-plus-lg"></i> Nova escola</button>
+    </div>
+  <?php endif; ?>
 </div>
 
 <!-- Modal escola -->
@@ -98,14 +103,14 @@ $polos = db_all("SELECT cod_polo, polo_nome FROM polos WHERE ies_ativo='S' ORDER
     <div class="modal-content">
       <form id="frmEscola" onsubmit="salvarEscola(event)">
         <div class="modal-header card-header-brand">
-          <h5 class="modal-title">Escola</h5>
+          <h5 class="modal-title m-0"><i class="bi bi-building"></i> <span id="ttlEscola">Nova escola</span></h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <input type="hidden" name="cod_escola" id="e_cod" value="0">
           <div class="row g-3">
             <div class="col-md-4">
-              <label class="form-label">Polo *</label>
+              <label class="form-label">Polo <span class="text-danger">*</span></label>
               <select class="form-select" name="cod_polo" id="e_polo" required>
                 <option value="">Selecione...</option>
                 <?php foreach ($polos as $po): ?>
@@ -114,7 +119,7 @@ $polos = db_all("SELECT cod_polo, polo_nome FROM polos WHERE ies_ativo='S' ORDER
               </select>
             </div>
             <div class="col-md-8">
-              <label class="form-label">Nome da escola *</label>
+              <label class="form-label">Nome da escola <span class="text-danger">*</span></label>
               <input type="text" class="form-control" name="escola_nome" id="e_nome" required maxlength="200">
             </div>
             <div class="col-md-6">
@@ -138,8 +143,8 @@ $polos = db_all("SELECT cod_polo, polo_nome FROM polos WHERE ies_ativo='S' ORDER
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-brand">Salvar</button>
+          <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-brand"><i class="bi bi-check-lg"></i> Salvar</button>
         </div>
       </form>
     </div>
@@ -155,9 +160,10 @@ document.addEventListener('DOMContentLoaded', function(){
 function abrirEscola(cod){
   document.getElementById('frmEscola').reset();
   document.getElementById('e_cod').value = cod || 0;
+  document.getElementById('ttlEscola').textContent = cod > 0 ? 'Editar escola' : 'Nova escola';
   if (cod > 0) {
     fetch('?a=escola_get&cod_escola=' + cod).then(r => r.json()).then(function(r){
-      if (r.erro) { alert(r.erro); return; }
+      if (r.erro) { toast(r.erro, 'erro'); return; }
       var d = r.dados;
       document.getElementById('e_polo').value  = d.cod_polo;
       document.getElementById('e_nome').value  = d.escola_nome || '';
@@ -179,9 +185,10 @@ function salvarEscola(ev){
   fetch('?a=escola_salvar', { method:'POST', body:fd })
     .then(r => r.json())
     .then(function(r){
-      if (r.erro) { alert(r.erro); return; }
+      if (r.erro) { toast(r.erro, 'erro'); return; }
       mdlEscola.hide();
-      location.reload();
+      toast('Escola salva.', 'ok');
+      setTimeout(function(){ location.reload(); }, 400);
     });
 }
 
@@ -192,8 +199,9 @@ function excluirEscola(cod, nome){
   fetch('?a=escola_excluir', { method:'POST', body:fd })
     .then(r => r.json())
     .then(function(r){
-      if (r.erro) { alert(r.erro); return; }
-      location.reload();
+      if (r.erro) { toast(r.erro, 'erro'); return; }
+      toast('Escola excluída.', 'ok');
+      setTimeout(function(){ location.reload(); }, 400);
     });
 }
 </script>
