@@ -21,7 +21,7 @@ try {
 
 $resumo = [
     'polos' => 0, 'escolas_novas' => 0, 'escolas_atualizadas' => 0,
-    'auditorias_novas' => 0, 'auditorias_atualizadas' => 0,
+    'audiencias_novas' => 0, 'audiencias_atualizadas' => 0,
     'avisos' => [],
 ];
 $detalhes = [];
@@ -83,7 +83,7 @@ try {
                 }
             }
 
-            // cria/atualiza auditoria apenas se tiver data + turma (obrigatórios)
+            // cria/atualiza audiencia apenas se tiver data + turma (obrigatórios)
             $data  = $f['dat_realizacao'];
             $turma = $f['turma'];
             $turno = $f['ies_turno'];
@@ -94,7 +94,7 @@ try {
             $status = 'nova';
             if (!$dryRun && $codEscola) {
                 // chave lógica: cod_escola + data + turma
-                $r = db_one("SELECT cod_auditoria FROM auditorias
+                $r = db_one("SELECT cod_audiencia FROM audiencias
                               WHERE cod_escola = :ce AND dat_realizacao = :dt AND turma = :tm",
                             [':ce'=>$codEscola, ':dt'=>$data, ':tm'=>$turma]);
 
@@ -108,9 +108,9 @@ try {
                     ':con' => $f['txt_conclusao'],
                 ];
                 if ($r) {
-                    $params[':c'] = (int)$r['cod_auditoria'];
+                    $params[':c'] = (int)$r['cod_audiencia'];
                     db_exec("
-                        UPDATE auditorias SET
+                        UPDATE audiencias SET
                             ies_turno=:tu, qtd_alunos=:qa, qtd_pcd=:qp, tecnico_responsavel=:tr,
                             lei_fluencia=:lf, lei_sem_fluencia=:lsf, lei_frases=:lfr,
                             lei_palavras=:lpa, lei_silabas=:lsi, lei_nao_leitor=:lnl,
@@ -118,13 +118,13 @@ try {
                             esc_silabico=:es, esc_pre_silabico=:eps,
                             txt_conclusao=:con, dat_alteracao=NOW(),
                             cod_polo=:cp, cod_escola=:ce, dat_realizacao=:dt, turma=:tm
-                         WHERE cod_auditoria=:c
+                         WHERE cod_audiencia=:c
                     ", $params);
-                    $resumo['auditorias_atualizadas']++;
+                    $resumo['audiencias_atualizadas']++;
                     $status = 'atualizada';
                 } else {
                     db_exec("
-                        INSERT INTO auditorias (
+                        INSERT INTO audiencias (
                             cod_escola, cod_polo, dat_realizacao, ies_turno, turma,
                             qtd_alunos, qtd_pcd, tecnico_responsavel,
                             lei_fluencia, lei_sem_fluencia, lei_frases, lei_palavras, lei_silabas, lei_nao_leitor,
@@ -138,11 +138,11 @@ try {
                             :con
                         )
                     ", $params);
-                    $resumo['auditorias_novas']++;
+                    $resumo['audiencias_novas']++;
                 }
             } else {
                 // dry-run: só conta
-                $resumo['auditorias_novas']++;
+                $resumo['audiencias_novas']++;
             }
 
             $detalhes[] = [

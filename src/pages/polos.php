@@ -4,7 +4,7 @@ $pageTitle = 'Polos';
 $polos = db_all("
     SELECT p.*,
            (SELECT COUNT(*) FROM escolas e WHERE e.cod_polo = p.cod_polo) AS qtd_escolas,
-           (SELECT COUNT(*) FROM auditorias a WHERE a.cod_polo = p.cod_polo) AS qtd_auditorias
+           (SELECT COUNT(*) FROM audiencias a WHERE a.cod_polo = p.cod_polo) AS qtd_audiencias
       FROM polos p
      ORDER BY p.polo_nome
 ");
@@ -25,7 +25,7 @@ $polos = db_all("
         <th style="width:60px;">#</th>
         <th>Nome</th>
         <th class="text-center" style="width:120px;">Escolas</th>
-        <th class="text-center" style="width:120px;">Auditorias</th>
+        <th class="text-center" style="width:120px;">Audiências</th>
         <th class="text-center" style="width:100px;">Status</th>
         <th style="width:140px;"></th>
       </tr>
@@ -36,7 +36,7 @@ $polos = db_all("
         <td class="text-muted-2"><?= (int)$po['cod_polo'] ?></td>
         <td><strong style="color:var(--ink)"><?= e($po['polo_nome']) ?></strong></td>
         <td class="text-center"><a href="<?= url('escolas', ['cod_polo' => $po['cod_polo']]) ?>"><?= (int)$po['qtd_escolas'] ?></a></td>
-        <td class="text-center"><a href="<?= url('auditorias', ['cod_polo' => $po['cod_polo']]) ?>"><?= (int)$po['qtd_auditorias'] ?></a></td>
+        <td class="text-center"><a href="<?= url('audiencias', ['cod_polo' => $po['cod_polo']]) ?>"><?= (int)$po['qtd_audiencias'] ?></a></td>
         <td class="text-center">
           <?php if ($po['ies_ativo'] === 'S'): ?>
             <span class="badge badge-ok">Ativo</span>

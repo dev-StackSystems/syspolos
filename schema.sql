@@ -1,5 +1,5 @@
 -- =====================================================================
--- Schema: Sistema de Auditoria de Leitura
+-- Schema: Sistema de Audiência de Leitura
 -- Banco : PostgreSQL (Neon)
 -- =====================================================================
 
@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS escolas (
 CREATE INDEX IF NOT EXISTS idx_escolas_polo ON escolas(cod_polo);
 CREATE INDEX IF NOT EXISTS idx_escolas_nome ON escolas(escola_nome);
 
-CREATE TABLE IF NOT EXISTS auditorias (
-    cod_auditoria            SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS audiencias (
+    cod_audiencia            SERIAL PRIMARY KEY,
     cod_escola               INTEGER NOT NULL REFERENCES escolas(cod_escola) ON DELETE RESTRICT,
     cod_polo                 INTEGER NOT NULL REFERENCES polos(cod_polo) ON DELETE RESTRICT,
     dat_realizacao           DATE NOT NULL,
@@ -54,9 +54,9 @@ CREATE TABLE IF NOT EXISTS auditorias (
     dat_cadastro             TIMESTAMP NOT NULL DEFAULT NOW(),
     dat_alteracao            TIMESTAMP
 );
-CREATE INDEX IF NOT EXISTS idx_audit_escola ON auditorias(cod_escola);
-CREATE INDEX IF NOT EXISTS idx_audit_polo   ON auditorias(cod_polo);
-CREATE INDEX IF NOT EXISTS idx_audit_data   ON auditorias(dat_realizacao);
+CREATE INDEX IF NOT EXISTS idx_audit_escola ON audiencias(cod_escola);
+CREATE INDEX IF NOT EXISTS idx_audit_polo   ON audiencias(cod_polo);
+CREATE INDEX IF NOT EXISTS idx_audit_data   ON audiencias(dat_realizacao);
 
 -- Seed dos 8 polos do arquivo Excel
 INSERT INTO polos (polo_nome) VALUES

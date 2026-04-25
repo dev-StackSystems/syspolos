@@ -1,17 +1,17 @@
 <?php
-$cod = (int)($_GET['cod_auditoria'] ?? 0);
-$pageTitle = 'Ficha de Auditoria';
+$cod = (int)($_GET['cod_audiencia'] ?? 0);
+$pageTitle = 'Ficha de Audiência';
 
 $a = db_one("
     SELECT a.*, e.escola_nome, e.localidade, e.diretor, e.coordenador, p.polo_nome
-      FROM auditorias a
+      FROM audiencias a
       JOIN escolas e ON e.cod_escola = a.cod_escola
       JOIN polos   p ON p.cod_polo   = a.cod_polo
-     WHERE a.cod_auditoria = :c
+     WHERE a.cod_audiencia = :c
 ", [':c' => $cod]);
 
 if (!$a) {
-    echo '<div class="alert alert-warning">Auditoria não encontrada.</div>';
+    echo '<div class="alert alert-warning">Audiência não encontrada.</div>';
     return;
 }
 
@@ -74,12 +74,12 @@ function pctv(int $v, int $total): string {
 <div class="no-print">
   <div class="page-title">
     <div>
-      <h4><i class="bi bi-clipboard-check"></i> Ficha de Auditoria <span class="badge badge-polo ms-2"><?= e($a['polo_nome']) ?></span></h4>
+      <h4><i class="bi bi-clipboard-check"></i> Ficha de Audiência <span class="badge badge-polo ms-2"><?= e($a['polo_nome']) ?></span></h4>
       <div class="muted-sub"><?= e($a['escola_nome']) ?> &middot; <?= fmt_date_br($a['dat_realizacao']) ?> &middot; <?= e($a['ies_turno']) ?></div>
     </div>
     <div class="d-flex gap-2">
-      <a href="<?= url('auditorias') ?>" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
-      <a href="<?= url('auditoria_form', ['cod_auditoria'=>$cod]) ?>" class="btn btn-ghost btn-sm"><i class="bi bi-pencil"></i> Editar</a>
+      <a href="<?= url('audiencias') ?>" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
+      <a href="<?= url('audiencia_form', ['cod_audiencia'=>$cod]) ?>" class="btn btn-ghost btn-sm"><i class="bi bi-pencil"></i> Editar</a>
       <button class="btn btn-brand btn-sm" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir / PDF</button>
     </div>
   </div>
@@ -89,7 +89,7 @@ function pctv(int $v, int $total): string {
 <div class="ficha-wrap">
 
   <div class="ficha-header">
-    <div class="title">Ficha de Auditoria de Leitura</div>
+    <div class="title">Ficha de Audiência de Leitura</div>
     <div class="sub">Secretaria Municipal de Educação</div>
     <div class="meta">
       <?= e($a['polo_nome']) ?> &middot; Emitida em <?= date('d/m/Y H:i') ?>
@@ -155,7 +155,7 @@ function pctv(int $v, int $total): string {
   <div class="ficha-footer">
     Registrado em <?= fmt_date_br($a['dat_cadastro']) ?>
     <?php if ($a['dat_alteracao']): ?> · Última alteração em <?= fmt_date_br($a['dat_alteracao']) ?><?php endif; ?>
-    &middot; Emitida via Sistema de Auditoria de Leitura
+    &middot; Emitida via Sistema de Audiência de Leitura
   </div>
 
 </div>

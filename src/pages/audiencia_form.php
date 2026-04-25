@@ -1,9 +1,9 @@
 <?php
-$cod = (int)($_GET['cod_auditoria'] ?? 0);
-$pageTitle = $cod ? 'Editar auditoria' : 'Nova auditoria';
+$cod = (int)($_GET['cod_audiencia'] ?? 0);
+$pageTitle = $cod ? 'Editar audiencia' : 'N';
 
 $a = [
-    'cod_auditoria' => 0, 'cod_escola' => 0, 'cod_polo' => 0,
+    'cod_audiencia' => 0, 'cod_escola' => 0, 'cod_polo' => 0,
     'dat_realizacao' => date('Y-m-d'), 'ies_turno' => 'Manhã', 'turma' => '',
     'qtd_alunos' => 0, 'qtd_pcd' => 0, 'tecnico_responsavel' => '',
     'lei_fluencia' => 0, 'lei_sem_fluencia' => 0, 'lei_frases' => 0,
@@ -13,9 +13,9 @@ $a = [
     'txt_conclusao' => '',
 ];
 if ($cod > 0) {
-    $rowA = db_one("SELECT * FROM auditorias WHERE cod_auditoria = :c", [':c' => $cod]);
+    $rowA = db_one("SELECT * FROM audiencias WHERE cod_audiencia = :c", [':c' => $cod]);
     if (!$rowA) {
-        echo '<div class="alert alert-warning">Auditoria não encontrada.</div>';
+        echo '<div class="alert alert-warning">Audiência não encontrada.</div>';
         return;
     }
     $a = array_merge($a, $rowA);
@@ -29,11 +29,11 @@ $escolas = db_all("SELECT cod_escola, cod_polo, escola_nome FROM escolas WHERE i
     <h4><i class="bi bi-<?= $cod ? 'pencil-square' : 'clipboard-plus' ?>"></i> <?= e($pageTitle) ?></h4>
     <div class="muted-sub">Preencha os critérios de leitura e escrita da turma avaliada.</div>
   </div>
-  <a href="<?= url('auditorias') ?>" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
+  <a href="<?= url('audiencias') ?>" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
 </div>
 
 <form id="frmAud" onsubmit="salvarAud(event)">
-  <input type="hidden" name="cod_auditoria" value="<?= (int)$a['cod_auditoria'] ?>">
+  <input type="hidden" name="cod_audiencia" value="<?= (int)$a['cod_audiencia'] ?>">
 
   <!-- Identificação -->
   <div class="card mb-3">
@@ -163,8 +163,8 @@ $escolas = db_all("SELECT cod_escola, cod_polo, escola_nome FROM escolas WHERE i
   </div>
 
   <div class="d-flex gap-2 justify-content-end">
-    <a href="<?= url('auditorias') ?>" class="btn btn-ghost">Cancelar</a>
-    <button type="submit" class="btn btn-brand"><i class="bi bi-check-lg"></i> Salvar auditoria</button>
+    <a href="<?= url('audiencias') ?>" class="btn btn-ghost">Cancelar</a>
+    <button type="submit" class="btn btn-brand"><i class="bi bi-check-lg"></i> Salvar audiencia</button>
   </div>
 </form>
 
@@ -333,19 +333,19 @@ function salvarAud(ev){
   btn.disabled = true; btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Salvando...';
   var fd = new FormData(document.getElementById('frmAud'));
   fd.append('ajax','1');
-  fetch('?a=auditoria_salvar', { method:'POST', body:fd })
+  fetch('?a=audiencia_salvar', { method:'POST', body:fd })
     .then(r => r.json())
     .then(function(r){
       if (r.erro) {
         toast(r.erro, 'erro');
-        btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar auditoria';
+        btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar audiencia';
         return;
       }
-      location.href = '?p=auditoria_view&cod_auditoria=' + r.cod_auditoria;
+      location.href = '?p=audiencia_view&cod_audiencia=' + r.cod_audiencia;
     })
     .catch(function(){
       toast('Erro de rede.', 'erro');
-      btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar auditoria';
+      btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar audiencia';
     });
 }
 </script>

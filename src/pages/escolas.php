@@ -14,7 +14,7 @@ if ($fil_q !== '') {
 
 $escolas = db_all("
     SELECT e.*, p.polo_nome,
-           (SELECT COUNT(*) FROM auditorias a WHERE a.cod_escola = e.cod_escola) AS qtd_auditorias
+           (SELECT COUNT(*) FROM audiencias a WHERE a.cod_escola = e.cod_escola) AS qtd_audiencias
       FROM escolas e
       JOIN polos p ON p.cod_polo = e.cod_polo
      WHERE " . implode(' AND ', $where) . "
@@ -78,7 +78,7 @@ $polos = db_all("SELECT cod_polo, polo_nome FROM polos WHERE ies_ativo='S' ORDER
         <td class="text-muted-2"><?= e($es['localidade']) ?: '—' ?></td>
         <td class="text-muted-2"><?= e($es['diretor']) ?: '—' ?></td>
         <td class="text-muted-2"><?= e($es['coordenador']) ?: '—' ?></td>
-        <td class="text-center"><a href="<?= url('auditorias', ['cod_escola' => $es['cod_escola']]) ?>"><?= (int)$es['qtd_auditorias'] ?></a></td>
+        <td class="text-center"><a href="<?= url('audiencias', ['cod_escola' => $es['cod_escola']]) ?>"><?= (int)$es['qtd_audiencias'] ?></a></td>
         <td>
           <button class="btn btn-sm btn-ghost" onclick="abrirEscola(<?= (int)$es['cod_escola'] ?>)" title="Editar"><i class="bi bi-pencil"></i></button>
           <button class="btn btn-sm btn-outline-danger" onclick="excluirEscola(<?= (int)$es['cod_escola'] ?>, '<?= e($es['escola_nome']) ?>')" title="Excluir"><i class="bi bi-trash"></i></button>
@@ -193,7 +193,7 @@ function salvarEscola(ev){
 }
 
 function excluirEscola(cod, nome){
-  if (!confirm('Excluir a escola "' + nome + '"?\nSó é possível se não houver auditorias vinculadas.')) return;
+  if (!confirm('Excluir a escola "' + nome + '"?\nSó é possível se não houver audiências vinculadas.')) return;
   var fd = new FormData();
   fd.append('cod_escola', cod); fd.append('ajax','1');
   fetch('?a=escola_excluir', { method:'POST', body:fd })

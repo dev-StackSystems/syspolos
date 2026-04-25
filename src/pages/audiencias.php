@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Auditorias';
+$pageTitle = 'Audiências';
 
 $fil_polo    = (int)($_GET['cod_polo']   ?? 0);
 $fil_escola  = (int)($_GET['cod_escola'] ?? 0);
@@ -18,11 +18,11 @@ $lista = db_all("
     SELECT a.*, e.escola_nome, p.polo_nome,
            (a.lei_fluencia + a.lei_sem_fluencia + a.lei_frases + a.lei_palavras + a.lei_silabas + a.lei_nao_leitor) AS tot_leitura,
            (a.esc_ortografico + a.esc_alfabetico + a.esc_silabico_alfabetico + a.esc_silabico + a.esc_pre_silabico) AS tot_escrita
-      FROM auditorias a
+      FROM audiencias a
       JOIN escolas e ON e.cod_escola = a.cod_escola
       JOIN polos   p ON p.cod_polo   = a.cod_polo
      WHERE " . implode(' AND ', $where) . "
-     ORDER BY a.dat_realizacao DESC, a.cod_auditoria DESC
+     ORDER BY a.dat_realizacao DESC, a.cod_audiencia DESC
      LIMIT 500
 ", $args);
 
@@ -32,16 +32,16 @@ $totRes  = count($lista);
 ?>
 <div class="page-title">
   <div>
-    <h4><i class="bi bi-clipboard-check"></i> Auditorias</h4>
-    <div class="muted-sub"><?= $totRes ?> auditoria<?= $totRes !== 1 ? 's' : '' ?> encontrada<?= $totRes !== 1 ? 's' : '' ?></div>
+    <h4><i class="bi bi-clipboard-check"></i> Audiências</h4>
+    <div class="muted-sub"><?= $totRes ?> audiência<?= $totRes !== 1 ? 's' : '' ?> encontrada<?= $totRes !== 1 ? 's' : '' ?></div>
   </div>
-  <a href="<?= url('auditoria_form') ?>" class="btn btn-brand btn-sm"><i class="bi bi-plus-lg"></i> Nova auditoria</a>
+  <a href="<?= url('audiencia_form') ?>" class="btn btn-brand btn-sm"><i class="bi bi-plus-lg"></i> Nova audiência</a>
 </div>
 
 <div class="card mb-3">
   <div class="card-body">
     <form method="GET" class="row g-2 align-items-end">
-      <input type="hidden" name="p" value="auditorias">
+      <input type="hidden" name="p" value="audiencias">
       <div class="col-md-2">
         <label class="form-label">Polo</label>
         <select name="cod_polo" class="form-select form-select-sm">
@@ -79,7 +79,7 @@ $totRes  = count($lista);
       </div>
       <div class="col-md-1 d-flex gap-1">
         <button class="btn btn-sm btn-brand flex-fill" title="Filtrar"><i class="bi bi-funnel"></i></button>
-        <a href="<?= url('auditorias') ?>" class="btn btn-sm btn-ghost" title="Limpar"><i class="bi bi-x"></i></a>
+        <a href="<?= url('audiencias') ?>" class="btn btn-sm btn-ghost" title="Limpar"><i class="bi bi-x"></i></a>
       </div>
     </form>
   </div>
@@ -111,9 +111,9 @@ $totRes  = count($lista);
         <td class="text-center" style="font-variant-numeric:tabular-nums;"><?= (int)$r['tot_leitura'] ?></td>
         <td class="text-center" style="font-variant-numeric:tabular-nums;"><?= (int)$r['tot_escrita'] ?></td>
         <td>
-          <a href="<?= url('auditoria_view', ['cod_auditoria' => $r['cod_auditoria']]) ?>" class="btn btn-sm btn-ghost" title="Ver"><i class="bi bi-eye"></i></a>
-          <a href="<?= url('auditoria_form', ['cod_auditoria' => $r['cod_auditoria']]) ?>" class="btn btn-sm btn-ghost" title="Editar"><i class="bi bi-pencil"></i></a>
-          <button class="btn btn-sm btn-outline-danger" title="Excluir" onclick="excluirAud(<?= (int)$r['cod_auditoria'] ?>)"><i class="bi bi-trash"></i></button>
+          <a href="<?= url('audiencia_view', ['cod_audiencia' => $r['cod_audiencia']]) ?>" class="btn btn-sm btn-ghost" title="Ver"><i class="bi bi-eye"></i></a>
+          <a href="<?= url('audiencia_form', ['cod_audiencia' => $r['cod_audiencia']]) ?>" class="btn btn-sm btn-ghost" title="Editar"><i class="bi bi-pencil"></i></a>
+          <button class="btn btn-sm btn-outline-danger" title="Excluir" onclick="excluirAud(<?= (int)$r['cod_audiencia'] ?>)"><i class="bi bi-trash"></i></button>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -122,23 +122,23 @@ $totRes  = count($lista);
   <?php else: ?>
     <div class="empty">
       <div class="empty-ico"><i class="bi bi-clipboard"></i></div>
-      <h5>Nenhuma auditoria encontrada</h5>
-      <p>Ajuste os filtros ou crie a primeira auditoria.</p>
-      <a href="<?= url('auditoria_form') ?>" class="btn btn-brand btn-sm"><i class="bi bi-plus-lg"></i> Nova auditoria</a>
+      <h5>Nenhuma audiência encontrada</h5>
+      <p>Ajuste os filtros ou crie a primeira audiência.</p>
+      <a href="<?= url('audiencia_form') ?>" class="btn btn-brand btn-sm"><i class="bi bi-plus-lg"></i> Nova audiência</a>
     </div>
   <?php endif; ?>
 </div>
 
 <script>
 function excluirAud(cod){
-  if (!confirm('Excluir esta auditoria? Esta ação não pode ser desfeita.')) return;
+  if (!confirm('Excluir esta audiencia? Esta ação não pode ser desfeita.')) return;
   var fd = new FormData();
-  fd.append('cod_auditoria', cod); fd.append('ajax','1');
-  fetch('?a=auditoria_excluir', { method:'POST', body:fd })
+  fd.append('cod_audiencia', cod); fd.append('ajax','1');
+  fetch('?a=audiencia_excluir', { method:'POST', body:fd })
     .then(r => r.json())
     .then(function(r){
       if (r.erro) { toast(r.erro, 'erro'); return; }
-      toast('Auditoria excluída.', 'ok');
+      toast('Audiência excluída.', 'ok');
       setTimeout(function(){ location.reload(); }, 400);
     });
 }

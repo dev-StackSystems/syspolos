@@ -1,6 +1,6 @@
-# Sistema de Auditoria de Leitura
+# Sistema de Audiência de Leitura
 
-Sistema web para digitalizar e organizar as auditorias de leitura que antes eram feitas manualmente no Excel (`AUDIÊNCIA DE LEITURA.xlsx`).
+Sistema web para digitalizar e organizar as audiências de leitura que antes eram feitas manualmente no Excel (`AUDIÊNCIA DE LEITURA.xlsx`).
 
 - **Backend:** PHP 8.2
 - **Banco:** PostgreSQL (Neon)
@@ -11,8 +11,8 @@ Sistema web para digitalizar e organizar as auditorias de leitura que antes eram
 
 ## Funcionalidades
 
-- CRUD completo de **Polos**, **Escolas** e **Auditorias**
-- Formulário da auditoria com todos os critérios de leitura/escrita
+- CRUD completo de **Polos**, **Escolas** e **Audiências**
+- Formulário da audiencia com todos os critérios de leitura/escrita
 - Ficha para visualização/impressão
 - **Relatório consolidado** com totais por polo e % por critério
 - **Importador XLSX** (com modo simulação) para migrar dados já existentes
@@ -24,7 +24,7 @@ Sistema web para digitalizar e organizar as auditorias de leitura que antes eram
 
 1. Acesse <https://neon.tech> e crie um projeto (plano free é suficiente).
 2. Copie a **connection string** (`postgres://usuario:senha@ep-xxxx.region.aws.neon.tech/dbname?sslmode=require`).
-3. No painel SQL Editor do Neon, rode o conteúdo de [`schema.sql`](./schema.sql). Ele cria as tabelas `polos`, `escolas`, `auditorias` e já popula os 8 polos.
+3. No painel SQL Editor do Neon, rode o conteúdo de [`schema.sql`](./schema.sql). Ele cria as tabelas `polos`, `escolas`, `audiencias` e já popula os 8 polos.
 
 ---
 
@@ -84,7 +84,7 @@ Esse runtime comunitário (`juicyfx/vercel-php`) provê **PHP 8.2** com as exten
 ## 4. Estrutura
 
 ```
-auditoria-leitura/
+audiencia-leitura/
 ├── api/
 │   └── index.php              # entry point (router)
 ├── src/
@@ -100,15 +100,15 @@ auditoria-leitura/
 │   │   ├── home.php           # painel com KPIs
 │   │   ├── polos.php          # CRUD polos
 │   │   ├── escolas.php        # CRUD escolas
-│   │   ├── auditorias.php     # lista com filtros
-│   │   ├── auditoria_form.php # formulário add/edit
-│   │   ├── auditoria_view.php # ficha readonly
+│   │   ├── audiencias.php     # lista com filtros
+│   │   ├── audiencia_form.php # formulário add/edit
+│   │   ├── audiencia_view.php # ficha readonly
 │   │   ├── relatorio.php      # consolidado
 │   │   └── importar.php       # upload xlsx
 │   └── actions/               # endpoints POST (JSON)
 │       ├── polo_salvar.php / polo_get.php / polo_excluir.php
 │       ├── escola_salvar.php / escola_get.php / escola_excluir.php
-│       ├── auditoria_salvar.php / auditoria_excluir.php
+│       ├── audiencia_salvar.php / audiencia_excluir.php
 │       └── importar_xlsx.php
 ├── schema.sql                 # DDL + seed dos 8 polos
 ├── vercel.json                # config runtime PHP 8.2
@@ -123,7 +123,7 @@ auditoria-leitura/
 
 1. **Primeiro acesso** — entre em **Polos** e **Escolas** e ajuste os nomes (ou use o **Importar**).
 2. **Importar do Excel** — em **Importar**, envie o `AUDIÊNCIA DE LEITURA.xlsx`. Sempre marque **"Simular apenas"** na primeira vez para revisar. Depois, desmarque e reprocesse.
-3. **Nova auditoria** — botão **Nova auditoria** no topo. Preencha identificação, critérios de leitura/escrita (os totais aparecem em tempo real) e o parecer.
+3. **N** — botão **N** no topo. Preencha identificação, critérios de leitura/escrita (os totais aparecem em tempo real) e o parecer.
 4. **Relatório** — em **Relatório**, filtre por polo e período. Use **Imprimir** pra gerar PDF pelo browser.
 
 ---
@@ -133,7 +133,7 @@ auditoria-leitura/
 O importador usa como chave lógica:
 
 - **Escola:** `cod_polo + escola_nome` (case-sensitive)
-- **Auditoria:** `cod_escola + dat_realizacao + turma`
+- **Audiência:** `cod_escola + dat_realizacao + turma`
 
 Se a mesma ficha for importada de novo, ela é **atualizada**, não duplicada.
 
@@ -141,7 +141,7 @@ Se a mesma ficha for importada de novo, ela é **atualizada**, não duplicada.
 
 ## Manutenção
 
-- Adicionar novo campo de critério: incluir na `schema.sql` (ALTER TABLE), no form (`auditoria_form.php`), no view (`auditoria_view.php`), no save (`auditoria_salvar.php`) e no relatório (`relatorio.php`).
+- Adicionar novo campo de critério: incluir na `schema.sql` (ALTER TABLE), no form (`audiencia_form.php`), no view (`audiencia_view.php`), no save (`audiencia_salvar.php`) e no relatório (`relatorio.php`).
 - Adicionar autenticação (se expor publicamente): middleware simples com usuário/senha no `api/index.php` ou integrar com Vercel Auth / Auth0.
 
 ---

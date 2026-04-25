@@ -1,5 +1,5 @@
 <?php
-$pageTitle   = $pageTitle   ?? 'Auditoria de Leitura';
+$pageTitle   = $pageTitle   ?? 'Audiência de Leitura';
 $currentPage = $_GET['p']   ?? 'home';
 $flash       = flash_get();
 ?><!doctype html>
@@ -7,7 +7,7 @@ $flash       = flash_get();
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($pageTitle) ?> · Auditoria de Leitura</title>
+<title><?= e($pageTitle) ?> · Audiência de Leitura</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,19 +288,19 @@ $flash       = flash_get();
   <div class="container-fluid d-flex align-items-center gap-3">
     <a class="brand" href="<?= url('home') ?>">
       <span class="brand-ico"><i class="bi bi-book-half"></i></span>
-      <span>Auditoria de Leitura</span>
+      <span>Audiência de Leitura</span>
     </a>
     <nav class="d-none d-lg-flex align-items-center gap-1 ms-3">
       <a class="nav-pill<?= $currentPage==='home'?' active':'' ?>" href="<?= url('home') ?>"><i class="bi bi-grid-1x2"></i> Painel</a>
-      <a class="nav-pill<?= in_array($currentPage,['auditorias','auditoria_form','auditoria_view'])?' active':'' ?>" href="<?= url('auditorias') ?>"><i class="bi bi-clipboard-check"></i> Auditorias</a>
+      <a class="nav-pill<?= in_array($currentPage,['audiencias','audiencia_form','audiencia_view'])?' active':'' ?>" href="<?= url('audiencias') ?>"><i class="bi bi-clipboard-check"></i> Audiências</a>
       <a class="nav-pill<?= $currentPage==='escolas'?' active':'' ?>" href="<?= url('escolas') ?>"><i class="bi bi-building"></i> Escolas</a>
       <a class="nav-pill<?= $currentPage==='polos'?' active':'' ?>" href="<?= url('polos') ?>"><i class="bi bi-geo-alt"></i> Polos</a>
       <a class="nav-pill<?= $currentPage==='relatorio'?' active':'' ?>" href="<?= url('relatorio') ?>"><i class="bi bi-graph-up"></i> Relatório</a>
       <a class="nav-pill<?= $currentPage==='importar'?' active':'' ?>" href="<?= url('importar') ?>"><i class="bi bi-cloud-upload"></i> Importar</a>
     </nav>
     <div class="ms-auto d-flex align-items-center gap-2">
-      <a href="<?= url('auditoria_form') ?>" class="btn btn-brand btn-sm">
-        <i class="bi bi-plus-lg"></i> Nova auditoria
+      <a href="<?= url('audiencia_form') ?>" class="btn btn-brand btn-sm">
+        <i class="bi bi-plus-lg"></i> Nova audiência
       </a>
       <?php $me = auth_user(); if ($me): ?>
         <div class="dropdown">
@@ -321,7 +321,7 @@ $flash       = flash_get();
   <div class="d-lg-none container-fluid pt-2">
     <div class="d-flex gap-1 flex-wrap">
       <a class="nav-pill<?= $currentPage==='home'?' active':'' ?>" href="<?= url('home') ?>"><i class="bi bi-grid-1x2"></i></a>
-      <a class="nav-pill<?= in_array($currentPage,['auditorias','auditoria_form','auditoria_view'])?' active':'' ?>" href="<?= url('auditorias') ?>"><i class="bi bi-clipboard-check"></i></a>
+      <a class="nav-pill<?= in_array($currentPage,['audiencias','audiencia_form','audiencia_view'])?' active':'' ?>" href="<?= url('audiencias') ?>"><i class="bi bi-clipboard-check"></i></a>
       <a class="nav-pill<?= $currentPage==='escolas'?' active':'' ?>" href="<?= url('escolas') ?>"><i class="bi bi-building"></i></a>
       <a class="nav-pill<?= $currentPage==='polos'?' active':'' ?>" href="<?= url('polos') ?>"><i class="bi bi-geo-alt"></i></a>
       <a class="nav-pill<?= $currentPage==='relatorio'?' active':'' ?>" href="<?= url('relatorio') ?>"><i class="bi bi-graph-up"></i></a>

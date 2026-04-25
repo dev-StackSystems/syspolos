@@ -4,7 +4,7 @@ $pageTitle = 'Importar XLSX';
 <div class="page-title">
   <div>
     <h4><i class="bi bi-cloud-upload"></i> Importar XLSX</h4>
-    <div class="muted-sub">Carregue o arquivo de auditorias e o sistema cria polos, escolas e auditorias automaticamente.</div>
+    <div class="muted-sub">Carregue o arquivo de audiências e o sistema cria polos, escolas e audiências automaticamente.</div>
   </div>
 </div>
 
@@ -35,7 +35,7 @@ $pageTitle = 'Importar XLSX';
         <ul class="mb-0 ps-3">
           <li>Fichas sem <b>data</b>, <b>escola</b> ou <b>turma</b> são ignoradas.</li>
           <li>Escolas já cadastradas são <b>atualizadas</b>, não duplicadas.</li>
-          <li>Auditorias duplicadas (mesma escola + data + turma) são <b>atualizadas</b>.</li>
+          <li>Audiências duplicadas (mesma escola + data + turma) são <b>atualizadas</b>.</li>
           <li>Sempre <b>simule primeiro</b> para revisar o que será importado.</li>
         </ul>
       </div>
@@ -69,7 +69,7 @@ function enviarXlsx(ev){
       html += '<div class="row g-3 mb-3">';
       html += '<div class="col-md-3"><div class="kpi-card"><div class="kpi-ico ind"><i class="bi bi-geo-alt"></i></div><div><div class="kpi-num">' + r.resumo.polos + '</div><div class="kpi-lbl">Polos processados</div></div></div></div>';
       html += '<div class="col-md-3"><div class="kpi-card"><div class="kpi-ico emr"><i class="bi bi-building"></i></div><div><div class="kpi-num">' + (r.resumo.escolas_novas + r.resumo.escolas_atualizadas) + '</div><div class="kpi-lbl">Escolas (' + r.resumo.escolas_novas + ' novas)</div></div></div></div>';
-      html += '<div class="col-md-3"><div class="kpi-card"><div class="kpi-ico amb"><i class="bi bi-clipboard-check"></i></div><div><div class="kpi-num">' + (r.resumo.auditorias_novas + r.resumo.auditorias_atualizadas) + '</div><div class="kpi-lbl">Auditorias (' + r.resumo.auditorias_novas + ' novas)</div></div></div></div>';
+      html += '<div class="col-md-3"><div class="kpi-card"><div class="kpi-ico amb"><i class="bi bi-clipboard-check"></i></div><div><div class="kpi-num">' + (r.resumo.audiencias_novas + r.resumo.audiencias_atualizadas) + '</div><div class="kpi-lbl">Audiências (' + r.resumo.audiencias_novas + ' novas)</div></div></div></div>';
       html += '<div class="col-md-3"><div class="kpi-card"><div class="kpi-ico vio"><i class="bi bi-exclamation-triangle"></i></div><div><div class="kpi-num">' + (r.resumo.avisos ? r.resumo.avisos.length : 0) + '</div><div class="kpi-lbl">Avisos</div></div></div></div>';
       html += '</div>';
       if (r.detalhes && r.detalhes.length) {
@@ -92,7 +92,7 @@ function enviarXlsx(ev){
       if (r.dry_run) {
         html += '<div class="alert alert-warning mt-3"><i class="bi bi-info-circle"></i> <strong>Modo simulação:</strong> nada foi gravado. Desmarque a caixa e envie novamente para importar.</div>';
       } else {
-        html += '<div class="mt-3"><a href="?p=auditorias" class="btn btn-brand btn-sm"><i class="bi bi-arrow-right"></i> Ver auditorias</a></div>';
+        html += '<div class="mt-3"><a href="?p=audiencias" class="btn btn-brand btn-sm"><i class="bi bi-arrow-right"></i> Ver audiências</a></div>';
       }
       html += '</div></div>';
       document.getElementById('resultado').innerHTML = html;

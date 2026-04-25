@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Relatório de Auditoria';
+$pageTitle = 'Relatório de Audiência';
 
 $fil_polo = (int)($_GET['cod_polo'] ?? 0);
 $fil_de   = $_GET['de']  ?? '';
@@ -26,17 +26,17 @@ $tot = db_one("
            COALESCE(SUM(esc_silabico_alfabetico),0)         AS esc_silabico_alfabetico,
            COALESCE(SUM(esc_silabico),0)                    AS esc_silabico,
            COALESCE(SUM(esc_pre_silabico),0)                AS esc_pre_silabico
-      FROM auditorias a
+      FROM audiencias a
      WHERE " . implode(' AND ', $where) . "
 ", $args);
 
-// Detalhe: auditorias agrupadas por polo
+// Detalhe: audiencias agrupadas por polo
 $rows = db_all("
-    SELECT p.cod_polo, p.polo_nome, a.cod_auditoria, a.dat_realizacao, a.ies_turno,
+    SELECT p.cod_polo, p.polo_nome, a.cod_audiencia, a.dat_realizacao, a.ies_turno,
            a.turma, a.qtd_alunos, a.qtd_pcd, e.escola_nome, e.localidade,
            (a.lei_fluencia+a.lei_sem_fluencia+a.lei_frases+a.lei_palavras+a.lei_silabas+a.lei_nao_leitor) AS tot_lei,
            (a.esc_ortografico+a.esc_alfabetico+a.esc_silabico_alfabetico+a.esc_silabico+a.esc_pre_silabico) AS tot_esc
-      FROM auditorias a
+      FROM audiencias a
       JOIN escolas e ON e.cod_escola = a.cod_escola
       JOIN polos   p ON p.cod_polo   = a.cod_polo
      WHERE " . implode(' AND ', $where) . "
@@ -160,7 +160,7 @@ $poloLabel = $fil_polo > 0 ? db_val("SELECT polo_nome FROM polos WHERE cod_polo 
 <div class="report-wrap">
 
   <div class="report-header">
-    <div class="title">Relatório de Auditoria de Leitura</div>
+    <div class="title">Relatório de Audiência de Leitura</div>
     <div class="sub">Secretaria Municipal de Educação</div>
     <div class="meta">
       <?= e($poloLabel) ?> &middot; <?= e($periodoLabel) ?> &middot; Emitido em <?= date('d/m/Y H:i') ?>
@@ -171,7 +171,7 @@ $poloLabel = $fil_polo > 0 ? db_val("SELECT polo_nome FROM polos WHERE cod_polo 
   <div class="report-section">
     <div class="report-section-title">Resumo geral</div>
     <div class="rep-summary">
-      <div class="item"><div class="n"><?= (int)$tot['qtd_audit'] ?></div><div class="l">Auditorias</div></div>
+      <div class="item"><div class="n"><?= (int)$tot['qtd_audit'] ?></div><div class="l">Audiências</div></div>
       <div class="item"><div class="n"><?= (int)$tot['tot_alunos'] ?></div><div class="l">Alunos avaliados</div></div>
       <div class="item"><div class="n"><?= (int)$tot['tot_pcd'] ?></div><div class="l">PCD</div></div>
       <div class="item"><div class="n"><?= $totLei ?></div><div class="l">Total leitura</div></div>
@@ -231,7 +231,7 @@ $poloLabel = $fil_polo > 0 ? db_val("SELECT polo_nome FROM polos WHERE cod_polo 
   <!-- Detalhado por polo -->
   <?php if ($porPolo): ?>
   <div class="report-section">
-    <div class="report-section-title">Auditorias por polo</div>
+    <div class="report-section-title">Audiências por polo</div>
     <table class="rep-table">
       <thead>
         <tr>
@@ -247,7 +247,7 @@ $poloLabel = $fil_polo > 0 ? db_val("SELECT polo_nome FROM polos WHERE cod_polo 
       <tbody>
         <?php foreach ($porPolo as $poloNome => $audits): ?>
           <tr class="grp-row">
-            <td colspan="7"><?= e($poloNome) ?> <span style="font-weight:500; text-transform:none; letter-spacing:normal;">(<?= count($audits) ?> auditoria<?= count($audits)>1?'s':'' ?>)</span></td>
+            <td colspan="7"><?= e($poloNome) ?> <span style="font-weight:500; text-transform:none; letter-spacing:normal;">(<?= count($audits) ?> audiencia<?= count($audits)>1?'s':'' ?>)</span></td>
           </tr>
           <?php foreach ($audits as $r): ?>
             <tr>
@@ -266,12 +266,12 @@ $poloLabel = $fil_polo > 0 ? db_val("SELECT polo_nome FROM polos WHERE cod_polo 
   </div>
   <?php else: ?>
   <div class="report-section">
-    <div class="empty"><div class="empty-ico"><i class="bi bi-inbox"></i></div><h5>Sem auditorias no período</h5></div>
+    <div class="empty"><div class="empty-ico"><i class="bi bi-inbox"></i></div><h5>Sem audiencias no período</h5></div>
   </div>
   <?php endif; ?>
 
   <div class="rep-footer">
-    Relatório gerado automaticamente pelo Sistema de Auditoria de Leitura — <?= date('d/m/Y H:i') ?>
+    Relatório gerado automaticamente pelo Sistema de Audiência de Leitura — <?= date('d/m/Y H:i') ?>
   </div>
 
 </div>

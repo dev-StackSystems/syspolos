@@ -1,6 +1,6 @@
 {
-  "name": "i3/auditoria-leitura",
-  "description": "Sistema de Auditoria de Leitura - POLOs/Escolas",
+  "name": "i3/audiencia-leitura",
+  "description": "Sistema de Audiência de Leitura - POLOs/Escolas",
   "type": "project",
   "require": {
     "php": "^8.1"

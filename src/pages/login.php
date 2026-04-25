@@ -15,7 +15,7 @@ $pageTitle = 'Entrar';
   <div class="login-card">
     <div class="login-header">
       <div class="ico"><i class="bi bi-book-half"></i></div>
-      <h1>Auditoria de Leitura</h1>
+      <h1>Audiência de Leitura</h1>
       <p>Entre para acessar o sistema</p>
     </div>
     <div class="login-body">
