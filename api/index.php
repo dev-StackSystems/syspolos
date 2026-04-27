@@ -6,8 +6,6 @@ require __DIR__ . '/../src/db.php';
 require __DIR__ . '/../src/helpers.php';
 require __DIR__ . '/../src/auth.php';
 
-auth_start_session();
-
 $action = isset($_GET['a']) ? basename((string)$_GET['a']) : null;
 $page   = isset($_GET['p']) ? basename((string)$_GET['p']) : 'home';
 
